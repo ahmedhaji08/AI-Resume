@@ -1,0 +1,51 @@
+/// app/api/checkout/route.ts
+export async function POST(request: Request) {
+  const { plan, checkoutMode, cents } = await request.json();
+
+  // Create ad-hoc prices with INR currency
+  const price_data = {
+    currency: "inr",
+    product_data: { name: `ElevateCV ${String(plan || "Pro").toUpperCase()}` },
+    unit_amount: cents, // amounts are in paise (minor units)
+    recurring: checkoutMode === "subscription" ? { interval: "month" } : undefined,
+  };
+
+  // /** rest of code here **/
+
+  // app/page.tsx
+  return (
+    <div>
+      <div className="text-4xl font-semibold">₹0</div>
+      <div className="text-4xl font-semibold">₹39</div>
+      <div className="text-4xl font-semibold">₹99</div>
+    </div>
+  );
+}
+
+// components/admin-dashboard.tsx
+import { CardContent, TableCell } from "@mui/material";
+
+export function AdminDashboard({ payments }) {
+  return (
+    <div>
+      <CardContent className="text-3xl font-semibold">
+        {"₹" +
+          (payments.reduce((a, p) => a + p.amountCents, 0) / 100).toLocaleString("en-IN", {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2,
+          })}
+      </CardContent>
+      <table>
+        <tbody>
+          {payments.map((p) => (
+            <tr key={p.id}>
+              <TableCell>
+                {"₹" + (p.amountCents / 100).toLocaleString("en-IN", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+              </TableCell>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+}

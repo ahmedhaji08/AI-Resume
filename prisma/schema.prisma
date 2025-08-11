@@ -1,0 +1,82 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id              Int       @id @default(autoincrement())
+  fullName        String    @map("full_name")
+  email           String    @unique
+  passwordHash    String    @map("password_hash")
+  role            String    @default("user")
+  linkedinId      String?   @map("linkedin_id")
+  profilePicture  String?   @map("profile_picture")
+  createdAt       DateTime  @default(now()) @map("created_at")
+  updatedAt       DateTime  @updatedAt @map("updated_at")
+
+  resumes         Resume[]
+  linkedinProfile LinkedInProfile?
+  payments        Payment[]
+  analytics       Analytics[]
+
+  @@map("users")
+}
+
+model Resume {
+  id                 Int       @id @default(autoincrement())
+  userId             Int       @map("user_id")
+  aiGeneratedContent String?   @map("ai_generated_content")
+  uploadedDocument   String?   @map("uploaded_document")
+  templateUsed       String?   @map("template_used")
+  lastUpdated        DateTime  @default(now()) @map("last_updated")
+
+  user               User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("resumes")
+}
+
+model LinkedInProfile {
+  id        Int      @id @default(autoincrement())
+  userId    Int      @unique @map("user_id")
+  headline  String?
+  summary   String?
+  experience Json?
+  education  Json?
+  skills     String[]
+  lastSynced DateTime @default(now()) @map("last_synced")
+
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("linkedin_profiles")
+}
+
+model Payment {
+  id             Int       @id @default(autoincrement())
+  userId         Int       @map("user_id")
+  amount         Decimal   @db.Decimal(10, 2)
+  currency       String    @default("USD")
+  paymentStatus  String    @default("pending") @map("payment_status")
+  paymentMethod  String?   @map("payment_method")
+  transactionId  String?   @unique @map("transaction_id")
+  createdAt      DateTime  @default(now()) @map("created_at")
+
+  user           User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("payments")
+}
+
+model Analytics {
+  id        Int      @id @default(autoincrement())
+  userId    Int      @map("user_id")
+  action    String
+  details   Json?
+  createdAt DateTime @default(now()) @map("created_at")
+
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("analytics")
+}
