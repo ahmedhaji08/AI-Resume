@@ -7,7 +7,7 @@ import { Card, CardContent } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator"
 import { Mail, Phone, Globe, Github, Linkedin } from "lucide-react"
 import { useResumeStore } from "@/store/resume-store"
-import saveAs from "file-saver"
+import {saveAs} from "file-saver"
 import { Document, Packer, Paragraph, HeadingLevel, AlignmentType } from "docx"
 import { useRef } from "react"
 
