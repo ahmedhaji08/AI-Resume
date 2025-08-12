@@ -1,357 +1,318 @@
 "use client"
 
-import Image from "next/image"
-import Link from "next/link"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
-import {
-  ShieldCheck,
-  FileText,
-  LineChart,
-  CreditCard,
-  Upload,
-  Users,
-  Bot,
-  Linkedin,
-  CheckCircle2,
-  Sparkles,
-} from "lucide-react"
-import { useEffect, useMemo, useState } from "react"
-import { Separator } from "@/components/ui/separator"
-import { cn } from "@/lib/utils"
-import { UserPanel } from "@/components/user-panel"
 import { SiteHeader } from "@/components/site-header"
+import { EnhancedUserPanel } from "@/components/user-panel"
+import { ResumePreview } from "@/components/resume-preview"
+import { BackgroundOrbs } from "@/components/background-orbs"
 import { AnimatedSection } from "@/components/animated-section"
 import { TiltCard } from "@/components/tilt-card"
-import { BackgroundOrbs } from "@/components/background-orbs"
+import { NumberTicker } from "@/components/number-ticker"
+import { Badge } from "@/components/ui/badge"
+import { Button } from "@/components/ui/button"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Sparkles, FileText, Linkedin, Download, Zap, Users, TrendingUp, Shield, Star, CheckCircle } from "lucide-react"
 import { motion } from "framer-motion"
 
-export default function Page() {
-  const [demoMode, setDemoMode] = useState(false)
-  const [status, setStatus] = useState<{ hasAI: boolean; hasStripe: boolean; provider: string | null } | null>(null)
-
-  useEffect(() => {
-    let active = true
-    ;(async () => {
-      try {
-        const res = await fetch("/api/status", { cache: "no-store" })
-        const s = await res.json()
-        if (!active) return
-        setStatus({ hasAI: s.hasAI ?? s.ai, hasStripe: s.hasStripe ?? s.payments, provider: s.provider ?? null })
-        setDemoMode(!((s.hasAI ?? s.ai) && (s.hasStripe ?? s.payments)))
-      } catch {
-        if (!active) return
-        setStatus({ hasAI: false, hasStripe: false, provider: null })
-        setDemoMode(true)
-      }
-    })()
-    return () => {
-      active = false
-    }
-  }, [])
-
-  const features = useMemo(
-    () => [
-      { icon: Bot, title: "AI Resume Builder", desc: "Generate tailored, ATS-friendly resumes in minutes." },
-      { icon: Linkedin, title: "LinkedIn Integration", desc: "Import your LinkedIn data or PDF to accelerate setup." },
-      { icon: Upload, title: "Document Upload", desc: "Attach existing resumes, cover letters, and certificates." },
-      { icon: Users, title: "User Management", desc: "Admin tools to manage accounts and permissions." },
-      { icon: LineChart, title: "Analytics & Reports", desc: "Track usage, conversion, and performance with charts." },
-      { icon: CreditCard, title: "Payment Tracking", desc: "Integrated checkout and reconciliation workflows." },
-    ],
-    [],
-  )
-
+export default function HomePage() {
   return (
-    <main className="min-h-screen bg-white text-zinc-900">
+    <div className="min-h-screen bg-gradient-to-br from-background via-background to-secondary/20">
+      <BackgroundOrbs />
       <SiteHeader />
 
-      {demoMode && (
-        <div className="mx-auto max-w-6xl px-4 pt-4">
-          <Alert>
-            <ShieldCheck className="h-4 w-4" />
-            <AlertTitle>Demo Mode</AlertTitle>
-            <AlertDescription>
-              {status ? (
-                <>
-                  AI {status.hasAI ? `enabled${status.provider ? ` (${status.provider})` : ""}` : "disabled"}; Payments{" "}
-                  {status.hasStripe ? "enabled" : "disabled"}. Add XAI_API_KEY or OPENAI_API_KEY, and STRIPE_SECRET_KEY
-                  to enable live flows.
-                </>
-              ) : (
-                "Detecting configuration..."
-              )}
-            </AlertDescription>
-          </Alert>
-        </div>
-      )}
+      {/* Hero Section */}
+      <AnimatedSection className="relative overflow-hidden py-20 lg:py-32">
+        <div className="mx-auto max-w-6xl px-4 text-center">
+          <motion.div
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+          >
+            <Badge variant="secondary" className="mb-6 animate-pulse">
+              <Sparkles className="mr-2 h-3 w-3" />
+              AI-Powered Resume Builder
+            </Badge>
+          </motion.div>
 
-      {/* Hero */}
-      <section className="relative">
-        <BackgroundOrbs />
-        <div className="mx-auto grid max-w-6xl grid-cols-1 items-center gap-10 px-4 py-16 md:grid-cols-2 md:py-24">
-          <AnimatedSection>
-            <div>
-              <div className="inline-flex items-center gap-2 rounded-full border px-3 py-1 text-xs text-zinc-600">
-                <Sparkles className="h-3.5 w-3.5" />
-                AI Resume & LinkedIn, crafted for professionals
+          <motion.h1
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.3 }}
+            className="mb-6 bg-gradient-to-r from-foreground via-foreground to-muted-foreground bg-clip-text text-4xl font-bold tracking-tight text-transparent sm:text-6xl lg:text-7xl"
+          >
+            Elevate Your Career with{" "}
+            <span className="bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent">
+              AI-Enhanced
+            </span>{" "}
+            Resumes
+          </motion.h1>
+
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.4 }}
+            className="mx-auto mb-8 max-w-2xl text-lg text-muted-foreground sm:text-xl"
+          >
+            Transform your LinkedIn profile into a professional resume in minutes. Our AI analyzes your content and
+            creates ATS-optimized resumes that get you hired.
+          </motion.p>
+
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.5 }}
+            className="flex flex-col items-center gap-4 sm:flex-row sm:justify-center"
+          >
+            <Button size="lg" className="group transition-all duration-300 hover:scale-105">
+              <Sparkles className="mr-2 h-5 w-5 transition-transform group-hover:rotate-12" />
+              Start Building Free
+            </Button>
+            <Button variant="outline" size="lg" className="transition-all duration-300 hover:scale-105 bg-transparent">
+              <FileText className="mr-2 h-5 w-5" />
+              View Examples
+            </Button>
+          </motion.div>
+
+          {/* Stats */}
+          <motion.div
+            initial={{ opacity: 0, y: 40 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.6 }}
+            className="mt-16 grid grid-cols-2 gap-8 sm:grid-cols-4"
+          >
+            <div className="text-center">
+              <div className="text-3xl font-bold text-primary">
+                <NumberTicker value={10000} />+
               </div>
-              <h1 className="mt-4 bg-gradient-to-b from-zinc-950 to-zinc-700 bg-clip-text text-4xl font-semibold tracking-tight text-transparent md:text-5xl">
-                Elevate your career with AI‑driven resumes and LinkedIn makeovers
-              </h1>
-              <p className="mt-4 text-lg text-zinc-600">
-                Create ATS‑optimized resumes, align your LinkedIn, and track progress—all in one corporate‑grade
-                platform.
-              </p>
-              <div className="mt-6 flex flex-wrap items-center gap-3">
-                <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
-                  <Button asChild>
-                    <a href="#product">Build My Resume</a>
-                  </Button>
-                </motion.div>
-                <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
-                  <Button asChild variant="outline">
-                    <a href="#features">Explore Features</a>
-                  </Button>
-                </motion.div>
-                <div className="flex items-center gap-2 text-sm text-zinc-500">
-                  <CheckCircle2 className="h-4 w-4 text-emerald-600" />
-                  No card required for demo
-                </div>
-              </div>
-              <div className="mt-6 flex items-center gap-6 text-sm text-zinc-500">
-                <div className="flex items-center gap-2">
-                  <FileText className="h-4 w-4" /> ATS‑friendly formats
-                </div>
-                <div className="flex items-center gap-2">
-                  <ShieldCheck className="h-4 w-4" /> Privacy‑first
-                </div>
-              </div>
+              <div className="text-sm text-muted-foreground">Resumes Created</div>
             </div>
-          </AnimatedSection>
-
-          <AnimatedSection delay={0.1}>
-            <motion.div
-              initial={{ opacity: 0, scale: 0.98, y: 8 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              transition={{ duration: 0.7, ease: "easeOut" }}
-              className="relative"
-            >
-              <Image
-                src="/corporate-analytics-mockup.png"
-                alt="Product preview"
-                width={960}
-                height={640}
-                className="rounded-xl border shadow-sm"
-                priority
-              />
-            </motion.div>
-          </AnimatedSection>
+            <div className="text-center">
+              <div className="text-3xl font-bold text-primary">
+                <NumberTicker value={95} />%
+              </div>
+              <div className="text-sm text-muted-foreground">ATS Compatible</div>
+            </div>
+            <div className="text-center">
+              <div className="text-3xl font-bold text-primary">
+                <NumberTicker value={4.9} decimals={1} />
+              </div>
+              <div className="text-sm text-muted-foreground">User Rating</div>
+            </div>
+            <div className="text-center">
+              <div className="text-3xl font-bold text-primary">
+                <NumberTicker value={24} />h
+              </div>
+              <div className="text-sm text-muted-foreground">Average Time Saved</div>
+            </div>
+          </motion.div>
         </div>
+      </AnimatedSection>
 
-        {/* Trusted by */}
-        <AnimatedSection>
-          <div className="mx-auto max-w-6xl px-4 pb-6">
-            <div className="rounded-xl border bg-white/60 p-4 backdrop-blur">
-              <div className="flex flex-col items-center justify-between gap-4 md:flex-row">
-                <p className="text-sm text-zinc-500">Trusted by professionals at</p>
-                <div className="flex flex-wrap items-center justify-center gap-6 grayscale">
-                  <Image src="/corporate-logo-1.png" alt="Corporate logo 1" width={80} height={28} />
-                  <Image src="/corporate-logo-2.png" alt="Corporate logo 2" width={80} height={28} />
-                  <Image src="/corporate-logo-3.png" alt="Corporate logo 3" width={80} height={28} />
-                  <Image src="/corporate-logo-4.png" alt="Corporate logo 4" width={80} height={28} />
-                  <Image src="/corporate-logo-5.png" alt="Corporate logo 5" width={80} height={28} />
+      {/* Features Section */}
+      <div id="features">
+        <AnimatedSection className="py-20">
+          <div className="mx-auto max-w-6xl px-4">
+            <div className="text-center">
+              <Badge variant="outline" className="mb-4">
+                <Zap className="mr-2 h-3 w-3" />
+                Features
+              </Badge>
+              <h2 className="mb-4 text-3xl font-bold sm:text-4xl">Everything you need to create the perfect resume</h2>
+              <p className="mx-auto mb-12 max-w-2xl text-muted-foreground">
+                Our AI-powered platform combines the best of technology and design to help you stand out.
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
+              {[
+                {
+                  icon: Linkedin,
+                  title: "LinkedIn Integration",
+                  description:
+                    "Import your LinkedIn profile data instantly and transform it into a professional resume.",
+                },
+                {
+                  icon: Sparkles,
+                  title: "AI Enhancement",
+                  description:
+                    "Our AI analyzes your content and suggests improvements to make your resume more impactful.",
+                },
+                {
+                  icon: Shield,
+                  title: "ATS Optimized",
+                  description:
+                    "Built-in ATS optimization ensures your resume passes through applicant tracking systems.",
+                },
+                {
+                  icon: Download,
+                  title: "Multiple Formats",
+                  description: "Export your resume in PDF, DOCX, or other formats with professional templates.",
+                },
+                {
+                  icon: TrendingUp,
+                  title: "Real-time Analytics",
+                  description: "Track your resume performance and get insights on how to improve your job search.",
+                },
+                {
+                  icon: Users,
+                  title: "Collaboration Tools",
+                  description: "Share your resume with mentors and get feedback before applying to jobs.",
+                },
+              ].map((feature, index) => (
+                <motion.div
+                  key={feature.title}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.5, delay: index * 0.1 }}
+                >
+                  <TiltCard>
+                    <Card className="h-full border-2 transition-all duration-300 hover:border-primary/50">
+                      <CardHeader>
+                        <div className="mb-2 flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10">
+                          <feature.icon className="h-6 w-6 text-primary" />
+                        </div>
+                        <CardTitle>{feature.title}</CardTitle>
+                        <CardDescription>{feature.description}</CardDescription>
+                      </CardHeader>
+                    </Card>
+                  </TiltCard>
+                </motion.div>
+              ))}
+            </div>
+          </div>
+        </AnimatedSection>
+      </div>
+
+      {/* Product Demo Section */}
+      <div id="product">
+        <AnimatedSection className="py-20">
+          <div className="mx-auto max-w-7xl px-4">
+            <div className="text-center">
+              <Badge variant="outline" className="mb-4">
+                <FileText className="mr-2 h-3 w-3" />
+                Try It Now
+              </Badge>
+              <h2 className="mb-4 text-3xl font-bold sm:text-4xl">Build Your Resume in Minutes</h2>
+              <p className="mx-auto mb-12 max-w-2xl text-muted-foreground">
+                Experience the power of AI-driven resume building. Import from LinkedIn, enhance with AI, and export
+                professionally.
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 gap-8 lg:grid-cols-2">
+              <div className="order-2 lg:order-1">
+                <EnhancedUserPanel />
+              </div>
+              <div className="order-1 lg:order-2">
+                <div className="sticky top-24">
+                  <ResumePreview />
                 </div>
               </div>
             </div>
           </div>
         </AnimatedSection>
-      </section>
+      </div>
 
-      {/* Features */}
-      <AnimatedSection className="border-t bg-zinc-50" delay={0.05}>
-        <div id="features" className="mx-auto max-w-6xl px-4 py-16 md:py-24">
-          <h2 className="text-3xl font-semibold tracking-tight">Purpose‑Built for Careers</h2>
-          <p className="mt-2 max-w-2xl text-zinc-600">
-            Everything you need to stand out—crafted with enterprise polish.
-          </p>
-          <div className="mt-8 grid grid-cols-1 gap-6 md:grid-cols-3">
-            {features.map((f, i) => (
-              <TiltCard key={i} className="h-full">
-                <Card className="h-full transition-shadow hover:shadow-lg">
-                  <CardHeader className="flex flex-row items-center gap-3">
-                    <f.icon className="h-5 w-5 text-zinc-900" />
-                    <div>
-                      <CardTitle className="text-base">{f.title}</CardTitle>
-                      <CardDescription>{f.desc}</CardDescription>
-                    </div>
-                  </CardHeader>
-                </Card>
-              </TiltCard>
-            ))}
-          </div>
-        </div>
-      </AnimatedSection>
-
-      {/* Product */}
-      <AnimatedSection className="border-t" delay={0.05}>
-        <div id="product" className="mx-auto max-w-6xl px-4 py-16 md:py-24">
-          <div className="flex items-end justify-between">
-            <div>
-              <h2 className="text-3xl font-semibold tracking-tight">Product</h2>
-              <p className="mt-2 max-w-2xl text-zinc-600">
-                Use the User Panel to build and refine. Admins can manage users, payments, and analytics in the portal.
+      {/* Pricing Section */}
+      <div id="pricing">
+        <AnimatedSection className="py-20">
+          <div className="mx-auto max-w-6xl px-4">
+            <div className="text-center">
+              <Badge variant="outline" className="mb-4">
+                <Star className="mr-2 h-3 w-3" />
+                Pricing
+              </Badge>
+              <h2 className="mb-4 text-3xl font-bold sm:text-4xl">Choose Your Plan</h2>
+              <p className="mx-auto mb-12 max-w-2xl text-muted-foreground">
+                Start free and upgrade as you grow. All plans include our core features.
               </p>
             </div>
+
+            <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
+              {[
+                {
+                  title: "Free",
+                  price: "₹0",
+                  description: "Perfect for getting started",
+                  features: ["1 Resume", "Basic Templates", "LinkedIn Import"],
+                  buttonText: "Get Started",
+                  popular: false,
+                },
+                {
+                  title: "Pro",
+                  price: "₹39",
+                  description: "For serious job seekers",
+                  features: ["Unlimited Resumes", "Premium Templates", "AI Enhancement", "ATS Optimization"],
+                  buttonText: "Upgrade to Pro",
+                  popular: true,
+                },
+                {
+                  title: "Enterprise",
+                  price: "₹99",
+                  description: "For teams and organizations",
+                  features: ["Everything in Pro", "Team Collaboration", "Analytics Dashboard", "Priority Support"],
+                  buttonText: "Contact Sales",
+                  popular: false,
+                },
+              ].map((plan, index) => (
+                <motion.div
+                  key={plan.title}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.5, delay: index * 0.1 }}
+                >
+                  <TiltCard>
+                    <Card
+                      className={`relative h-full border-2 transition-all duration-300 hover:border-primary/50 ${
+                        plan.popular ? "border-primary" : ""
+                      }`}
+                    >
+                      {plan.popular && (
+                        <Badge className="absolute -top-2 left-1/2 -translate-x-1/2">Most Popular</Badge>
+                      )}
+                      <CardHeader>
+                        <CardTitle>{plan.title}</CardTitle>
+                        <div className="text-4xl font-bold">{plan.price}</div>
+                        <CardDescription>{plan.description}</CardDescription>
+                      </CardHeader>
+                      <CardContent className="space-y-4">
+                        <div className="space-y-2">
+                          {plan.features.map((feature, featureIndex) => (
+                            <div key={featureIndex} className="flex items-center gap-2">
+                              <CheckCircle className="h-4 w-4 text-green-500" />
+                              <span className="text-sm">{feature}</span>
+                            </div>
+                          ))}
+                        </div>
+                        <Button
+                          className={`w-full ${plan.popular ? "" : "bg-transparent"}`}
+                          variant={plan.popular ? "default" : "outline"}
+                        >
+                          {plan.buttonText}
+                        </Button>
+                      </CardContent>
+                    </Card>
+                  </TiltCard>
+                </motion.div>
+              ))}
+            </div>
           </div>
-
-          <div id="user-panel" className="mt-8">
-            <UserPanel />
-          </div>
-        </div>
-      </AnimatedSection>
-
-      {/* Pricing */}
-      <AnimatedSection className="border-t bg-zinc-50" delay={0.05}>
-        <div id="pricing" className="mx-auto max-w-6xl px-4 py-16 md:py-24">
-          <h2 className="text-3xl font-semibold tracking-tight">Simple, Transparent Pricing</h2>
-          <p className="mt-2 max-w-2xl text-zinc-600">Upgrade when you&apos;re ready. Demo is free.</p>
-
-          <div className="mt-8 grid grid-cols-1 gap-6 md:grid-cols-3">
-            <TiltCard>
-              <Card className="flex flex-col transition-shadow hover:shadow-lg">
-                <CardHeader>
-                  <CardTitle>Starter</CardTitle>
-                  <CardDescription>Try the essentials</CardDescription>
-                </CardHeader>
-                <CardContent className="flex grow flex-col">
-                  <div className="text-4xl font-semibold">₹0</div>
-                  <p className="mt-2 text-sm text-zinc-600">Limited AI credits</p>
-                  <Separator className="my-4" />
-                  <ul className="space-y-2 text-sm text-zinc-700">
-                    <li>• AI resume draft</li>
-                    <li>• Upload one document</li>
-                    <li>• Manual LinkedIn import</li>
-                  </ul>
-                  <div className="mt-6">
-                    <Button asChild variant="outline" className="w-full bg-transparent">
-                      <a href="#product">Start Free</a>
-                    </Button>
-                  </div>
-                </CardContent>
-              </Card>
-            </TiltCard>
-
-            <motion.div
-              initial={{ y: 0 }}
-              animate={{ y: [0, -4, 0] }}
-              transition={{ duration: 6, repeat: Number.POSITIVE_INFINITY, ease: "easeInOut" }}
-            >
-              <TiltCard>
-                <Card className="flex flex-col border-zinc-900 transition-shadow hover:shadow-xl">
-                  <CardHeader>
-                    <CardTitle>Pro</CardTitle>
-                    <CardDescription>For active job seekers</CardDescription>
-                  </CardHeader>
-                  <CardContent className="flex grow flex-col">
-                    <div className="text-4xl font-semibold">₹3,900</div>
-                    <p className="mt-2 text-sm text-zinc-600">One‑time</p>
-                    <Separator className="my-4" />
-                    <ul className="space-y-2 text-sm text-zinc-700">
-                      <li>• Unlimited AI generations</li>
-                      <li>• Full LinkedIn makeover</li>
-                      <li>• Export PDF/Docx</li>
-                    </ul>
-                    <div className="mt-6">
-                      <PaymentButton plan="pro" amountCents={390000} label="Upgrade to Pro" />
-                    </div>
-                  </CardContent>
-                </Card>
-              </TiltCard>
-            </motion.div>
-
-            <TiltCard>
-              <Card className="flex flex-col transition-shadow hover:shadow-lg">
-                <CardHeader>
-                  <CardTitle>Team</CardTitle>
-                  <CardDescription>For career coaches & HR</CardDescription>
-                </CardHeader>
-                <CardContent className="flex grow flex-col">
-                  <div className="text-4xl font-semibold">₹9,900</div>
-                  <p className="mt-2 text-sm text-zinc-600">per seat / mo</p>
-                  <Separator className="my-4" />
-                  <ul className="space-y-2 text-sm text-zinc-700">
-                    <li>• Admin & analytics</li>
-                    <li>• Priority support</li>
-                    <li>• Bulk credits</li>
-                  </ul>
-                  <div className="mt-6">
-                    <PaymentButton plan="team" amountCents={990000} label="Start Team Trial" modeSubscription />
-                  </div>
-                </CardContent>
-              </Card>
-            </TiltCard>
-          </div>
-        </div>
-      </AnimatedSection>
+        </AnimatedSection>
+      </div>
 
       {/* Footer */}
-      <footer className="border-t">
-        <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-4 px-4 py-10 md:flex-row">
-          <div className="text-sm text-zinc-500">© {new Date().getFullYear()} ElevateCV Inc. All rights reserved.</div>
-          <div className="flex items-center gap-6 text-sm text-zinc-600">
-            <Link href="#" className="hover:text-zinc-900">
-              Privacy
-            </Link>
-            <Link href="#" className="hover:text-zinc-900">
-              Terms
-            </Link>
-            <Link href="#" className="hover:text-zinc-900">
-              Support
-            </Link>
+      <footer className="border-t py-12">
+        <div className="mx-auto max-w-6xl px-4">
+          <div className="flex flex-col items-center justify-between gap-4 sm:flex-row">
+            <div className="flex items-center gap-2">
+              <div className="h-6 w-6 rounded bg-primary" />
+              <span className="font-semibold">ElevateCV</span>
+            </div>
+            <p className="text-sm text-muted-foreground">© 2024 ElevateCV. All rights reserved.</p>
           </div>
         </div>
       </footer>
-    </main>
-  )
-}
-
-function PaymentButton(props: { plan: string; amountCents: number; label?: string; modeSubscription?: boolean }) {
-  const [loading, setLoading] = useState(false)
-  const label = props.label ?? "Checkout"
-
-  async function onCheckout() {
-    try {
-      setLoading(true)
-      const res = await fetch("/api/checkout", {
-        method: "POST",
-        headers: { "content-type": "application/json" },
-        body: JSON.stringify({
-          plan: props.plan,
-          amountCents: props.amountCents, // INR paise
-          mode: props.modeSubscription ? "subscription" : "payment",
-        }),
-      })
-      const data = await res.json()
-      if (data.url) {
-        window.location.href = data.url
-      } else {
-        alert("Checkout unavailable. Running demo mode.")
-      }
-    } catch (e: any) {
-      console.error(e)
-      alert("Something went wrong starting checkout.")
-    } finally {
-      setLoading(false)
-    }
-  }
-
-  return (
-    <motion.div whileHover={{ scale: 1.01 }} whileTap={{ scale: 0.99 }}>
-      <Button onClick={onCheckout} disabled={loading} className={cn("w-full", loading && "opacity-70")}>
-        {loading ? "Redirecting..." : label}
-      </Button>
-    </motion.div>
+    </div>
   )
 }
