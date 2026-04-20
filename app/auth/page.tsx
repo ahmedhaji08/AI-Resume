@@ -1,10 +1,18 @@
-"use client"
-
+// app/auth/page.tsx
+import { Suspense } from "react"
 import { SiteHeader } from "@/components/site-header"
 import { AuthForm } from "@/components/auth-form"
 import { Card, CardContent, CardHeader } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Shield, Zap, Users } from "lucide-react"
+
+function AuthFormFallback() {
+  return (
+    <div className="flex items-center justify-center py-8">
+      <div className="h-6 w-6 animate-spin rounded-full border-2 border-primary border-t-transparent" />
+    </div>
+  )
+}
 
 export default function AuthPage() {
   return (
@@ -71,7 +79,9 @@ export default function AuthPage() {
                 </div>
               </CardHeader>
               <CardContent>
-                <AuthForm />
+                <Suspense fallback={<AuthFormFallback />}>
+                  <AuthForm />
+                </Suspense>
               </CardContent>
             </Card>
 
